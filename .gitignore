@@ -21,6 +21,7 @@ src/
 # Output files, except requirements.txt
 *.txt
 !requirements.txt
+!sources.txt
 
 # Comma-Separated Values (CSV) Reports
 *.csv
