@@ -1,0 +1,58 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Recipe",
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "Recipe name"
+      },
+      "description": {
+        "type": "string",
+        "description": "A brief description of the recipe"
+      },
+      "source_url":{
+        "type": "string",
+        "description": "Source url for the recipe obtained"
+      },
+      "prep_time": {
+        "type": "string",
+        "pattern": "^\\d{2}:\\d{2}$",
+        "description": "Preparation time of the recipe (format: HH:MM)"
+      },
+      "ingredients": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name of the ingredient"
+            },
+            "quantity": {
+              "type": "string",
+              "description": "Quantity of the ingredient"
+            },
+            "unit": {
+              "type": "string",
+              "description": "Unit of measurement (g, tbsp etc.)"
+            }
+          },
+          "required": ["name", "quantity", "unit"]
+        }
+      },
+      "instructions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "tags": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": ["name", "ingredients", "instructions"]
+  }
