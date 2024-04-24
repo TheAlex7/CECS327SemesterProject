@@ -1,0 +1,71 @@
+# Name(s) : Alex Lopez, Anthony Tran, Glenn Lee
+
+#Reference(s) : https://docs.docker.com/language/python/develop/
+version: '3'
+services: # Defines containsers to be created
+  master:
+    build: 
+      context: ./master # Path for Dockerfile for building the master serice image
+    ports:
+      - "5005:5000" # Maps port 5000 inside container to port 5005 on host
+    networks:
+      - Proj2-distributed-network # Connects to netowrk
+    volumes:
+      - ./data:/app/data
+
+  node1: # Definition for first node service
+    build: 
+      context: ./node # Path to Dockerfile for node
+      args:
+        NODE_ID: "1" # Build argument
+    ports:
+      - "5001:5000" # Maps port 5000 inside container to port 5001 on host
+    environment: # Environment var passed to conatiner
+      NODE_ID: "1" # Used by node file to identify itself
+      LISTEN_PORT: "5001" # Port this node listens to
+    networks:
+      - Proj2-distributed-network
+
+  node2: # Definition for second node service
+    build: 
+      context: ./node # Path to Dockerfile for node
+      args:
+        NODE_ID: "2"  # Build argument
+    ports:
+      - "5002:5000" # Maps port 5000 inside container to port 5002 on host
+    environment:
+      NODE_ID: "2" # Used by node file to identify itself
+      LISTEN_PORT: "5002" # Port this node lsitens to
+    networks:
+      - Proj2-distributed-network
+
+  node3: # Definition for third node service
+    build: 
+      context: ./node # Path to Dockerfile for node
+      args:
+        NODE_ID: "3" # Build argument
+    ports:
+      - "5003:5000" # Maps port 5000 inside container to port 5003 on host
+    environment:
+      NODE_ID: "3" # Used by node file to identify itself
+      LISTEN_PORT: "5003" # Port this node listens to
+    networks:
+      - Proj2-distributed-network
+
+  node4: # Definition for third node service
+    build: 
+      context: ./node # Path to Dockerfile for node
+      args:
+        NODE_ID: "4" # Build argument
+    ports:
+      - "5004:5000" # Maps port 5000 inside container to port 5004 on host
+    environment:
+      NODE_ID: "4" # Used by node file to identify itself
+      LISTEN_PORT: "5004" # Port this node lsitens to
+    networks:
+      - Proj2-distributed-network
+
+networks:
+  Proj2-distributed-network: # Defines custom network
+    name: Proj2-distributed-network # Specifies network name
+    driver: bridge # Uses bridge driver for Docker networking
