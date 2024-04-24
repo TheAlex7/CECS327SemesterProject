@@ -4,7 +4,7 @@
 version: '3'
 services: # Defines containsers to be created
   master:
-    build: 
+    build:
       context: ./master # Path for Dockerfile for building the master serice image
     ports:
       - "5005:5000" # Maps port 5000 inside container to port 5005 on host
