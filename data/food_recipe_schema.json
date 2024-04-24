@@ -3,13 +3,14 @@
     "title": "Recipe",
     "type": "object",
     "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid",
+        "description": "Unique identifier for the recipe"
+      },
       "name": {
         "type": "string",
         "description": "Recipe name"
-      },
-      "description": {
-        "type": "string",
-        "description": "A brief description of the recipe"
       },
       "source_url":{
         "type": "string",
