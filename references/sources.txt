@@ -1,6 +1,6 @@
 Inspiratio:
-● https://ieeexplore.ieee.org/document/8118431 [1]
-● https://ieeexplore.ieee.org/document/10270597 [2]
+● https://ieeexplore-ieee-org.csulb.idm.oclc.org/document/8118431 [1]
+● https://ieeexplore-ieee-org.csulb.idm.oclc.org/document/10270597 [2]
 
 Approach:
 Our choice for this project is to work on a web scraper that is built on a distributed
