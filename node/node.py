@@ -1,11 +1,8 @@
 # Name(s) : Alex Lopez, Anthony Tran, Glen Lee
 
-import socket
-import struct
 import sys
 import os
 import time
-import csv
 import json
 import jsonschema
 import uuid
@@ -22,11 +19,13 @@ def writetojson(data, schema):
             json.dump(data, json_file, indent=4)
         print(f"Data has been successfully written to '{data["name"]}{uuid}.json' ")
 
-# Load JSON Schema
-with open('schema.json', 'r') as schema_file:
-    schema = json.load(schema_file)
+
 
 def main():
+    # Load JSON Schema
+    with open('./data/food_recipe_schema.json', 'r') as schema_file:
+        schema = json.load(schema_file)
+        
     # Retrieve NODE_ID environment variable to identify the node
     node_id = os.getenv('NODE_ID')
     print(f'STARTING UP NODE {node_id}')

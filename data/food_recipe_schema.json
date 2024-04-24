@@ -6,7 +6,7 @@
       "id": {
         "type": "string",
         "format": "uuid",
-        "description": "Unique identifier for the recipe"
+        "description": "Universally unique identifier for the recipe"
       },
       "name": {
         "type": "string",
@@ -55,5 +55,5 @@
         }
       }
     },
-    "required": ["name", "ingredients", "instructions"]
+    "required": ["name", "ingredients", "instructions", "source_url"]
   }

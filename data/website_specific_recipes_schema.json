@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "WebsiteRecipes",
+    "type": "object",
+    "properties": {
+      "recipes": {
+        "type": "array",
+        "items": {
+          "$ref": "data/food_recipe_schema.json"
+        }
+      }
+    },
+    "required": ["recipes"]
+  }
+  
