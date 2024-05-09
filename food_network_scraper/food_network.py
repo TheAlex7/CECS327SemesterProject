@@ -101,9 +101,6 @@ def scrape_website():
         # looking for the "Next →" HTML element in the new page
         
         next_li_element = soup.find('a', class_='o-Pagination__a-Button.o-Pagination__a-NextButton')
-
-    # with open('./data/food_recipe_schema.json', 'r') as schema_file:
-    #     food_schema = json.load(schema_file)
     
     #schema to compile multiple recipes into 1 json file.
     # this json file will be labeled according to the main domain source
@@ -165,8 +162,8 @@ def writetojson(data, schema):
 
 def main():
     # Load JSON Schema
-    with open('./data/food_recipe_schema.json', 'r') as schema_file:
-        schema = json.load(schema_file)
+    # with open('./data/food_recipe_schema.json', 'r') as schema_file:
+    #     schema = json.load(schema_file)
         
     # Retrieve NODE_ID environment variable to identify the node
     node_id = os.getenv('NODE_ID')
