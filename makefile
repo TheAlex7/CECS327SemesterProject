@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := build
 
-build: # create new docker image along with csv file containing network logs (analysis tool)
+build: # create new docker image along with json file containing recipes
 	@echo "Building new Docker Network..."
 	@docker-compose up --build
 
