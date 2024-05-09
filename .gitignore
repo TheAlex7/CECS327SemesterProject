@@ -22,6 +22,7 @@ src/
 *.txt
 !requirements.txt
 !sources.txt
+!visited_links.txt
 
 # Comma-Separated Values (CSV) Reports
 *.csv

@@ -1,13 +1,15 @@
-# Name(s) : Alex Lopez, Anthony Tran, Glenn Lee
+# Name(s) : Alex Lopez, Anthony Tran, Glen Lee
+
+# Description: we took our old docker-compose.yml from project 1 and tweaked it to fit this project
 
 #Reference(s) : https://docs.docker.com/language/python/develop/
 version: '3'
 services: # Defines containsers to be created
   master:
     build:
-      context: ./master # Path for Dockerfile for building the master serice image
-    ports:
-      - "5005:5000" # Maps port 5000 inside container to port 5005 on host
+      context: ./master # Path for Dockerfile for building the master service image
+    # ports:
+    #   - "5005:5000" # Maps port 5000 inside container to port 5005 on host
     networks:
       - Proj2-distributed-network # Connects to netowrk
     volumes:
@@ -15,14 +17,16 @@ services: # Defines containsers to be created
 
   node1: # Definition for first node service
     build: 
-      context: ./node # Path to Dockerfile for node
+      context: ./food_network_scraper # Path to Dockerfile for scraper node
       args:
         NODE_ID: "1" # Build argument
-    ports:
-      - "5001:5000" # Maps port 5000 inside container to port 5001 on host
-    environment: # Environment var passed to conatiner
-      NODE_ID: "1" # Used by node file to identify itself
-      LISTEN_PORT: "5001" # Port this node listens to
+    # ports:
+    #   - "5001:5000" # Maps port 5000 inside container to port 5001 on host
+    # environment: # Environment var passed to conatiner
+    #   NODE_ID: "1" # Used by node file to identify itself
+    #   LISTEN_PORT: "5001" # Port this node listens to
+    volumes:
+      - ./data:/app/data
     networks:
       - Proj2-distributed-network
 
@@ -31,37 +35,13 @@ services: # Defines containsers to be created
       context: ./node # Path to Dockerfile for node
       args:
         NODE_ID: "2"  # Build argument
-    ports:
-      - "5002:5000" # Maps port 5000 inside container to port 5002 on host
-    environment:
-      NODE_ID: "2" # Used by node file to identify itself
-      LISTEN_PORT: "5002" # Port this node lsitens to
-    networks:
-      - Proj2-distributed-network
-
-  node3: # Definition for third node service
-    build: 
-      context: ./node # Path to Dockerfile for node
-      args:
-        NODE_ID: "3" # Build argument
-    ports:
-      - "5003:5000" # Maps port 5000 inside container to port 5003 on host
-    environment:
-      NODE_ID: "3" # Used by node file to identify itself
-      LISTEN_PORT: "5003" # Port this node listens to
-    networks:
-      - Proj2-distributed-network
-
-  node4: # Definition for third node service
-    build: 
-      context: ./node # Path to Dockerfile for node
-      args:
-        NODE_ID: "4" # Build argument
-    ports:
-      - "5004:5000" # Maps port 5000 inside container to port 5004 on host
-    environment:
-      NODE_ID: "4" # Used by node file to identify itself
-      LISTEN_PORT: "5004" # Port this node lsitens to
+    # ports:
+    #   - "5002:5000" # Maps port 5000 inside container to port 5002 on host
+    # environment:
+    #   NODE_ID: "2" # Used by node file to identify itself
+    #   LISTEN_PORT: "5002" # Port this node lsitens to
+    volumes:
+      - ./data:/app/data
     networks:
       - Proj2-distributed-network
 

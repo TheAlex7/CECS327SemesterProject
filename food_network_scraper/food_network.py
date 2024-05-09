@@ -24,9 +24,9 @@ def scrape_page(soup, recipe):
 
     # iterating through recipe link
     for link in recipe_links:
-        if link in links_visited:
-            continue
         recipe_url = 'https:' + link.find('a')['href']
+        if recipe_url in links_visited:
+            continue
         print(recipe_url)
         recipe_response = requests.get(recipe_url)
         recipe_html = recipe_response.text
@@ -38,9 +38,6 @@ def scrape_page(soup, recipe):
         ingredients = [ingredient.text.strip() for ingredient in ingredients_list]
         directions_list = recipe_soup.find_all('li', class_= 'o-Method__m-Step')
         directions = [direction.text.strip() for direction in directions_list]
-        # category_list = recipe_soup.find_all('a', class_= 'o-Capsule__a-Tag.a-Tag')
-        # category = [category_list.soup.a['title'] for category in category_list] 
-        # category = [category.text.strip() for category in category_list]
         recipe.append(
             {
                 'name': recipe_name,
@@ -51,9 +48,9 @@ def scrape_page(soup, recipe):
         
         )
         #newly seen link gets added to set and txt file
-        links_visited.add(link)
+        links_visited.add(recipe_url)
         with open("./food_network_scraper/visited_links.txt",'a') as visited_links:
-            visited_links.write(f"{link}\n")
+            visited_links.write(f"{recipe_url}\n")
 
 def scrape_website():
     
