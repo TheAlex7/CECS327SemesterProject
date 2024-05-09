@@ -11,6 +11,13 @@ from jsonschema import validate
 
 from bs4 import BeautifulSoup
 import requests
+import pymongo
+
+# connecting to mongo server
+# MUST have your own connection string
+# client = pymongo.MongoClient("your_connection_string")
+# db = client["RecipeDB"]
+# collection = db["recipes"]
 
 def scrape_page(soup, recipe):
     # find all recipe links
@@ -51,9 +58,9 @@ def scrape_page(soup, recipe):
         links_visited.add(recipe_url)
         with open("./food_network_scraper/visited_links.txt",'a') as visited_links:
             visited_links.write(f"{recipe_url}\n")
+        break
 
 def scrape_website():
-    
     # the url of the home page of the target website
     base_url = 'https://www.foodnetwork.com/recipes/recipes-a-z'
 
@@ -97,7 +104,6 @@ def scrape_website():
         scrape_page(soup, recipies)
 
         # looking for the "Next →" HTML element in the new page
-        
         next_li_element = soup.find('a', class_='o-Pagination__a-Button.o-Pagination__a-NextButton')
     
     #schema to compile multiple recipes into 1 json file.
@@ -106,19 +112,30 @@ def scrape_website():
     with open('./data/website_specific_recipes_schema.json', 'r') as schema_file:
         website_schema = json.load(schema_file)
 
+    #individual food recipe json schema
+    with open('./data/food_recipe_schema.json', 'r') as schema_file:
+        food_schema = json.load(schema_file)
+
     json_recipes = []
     for recipe in recipies:
-        uuid1 = str(uuid.uuid4()) # uuid for id of recipe object
-        recipe["id"] = uuid1 # adding id to dictionary (recipe object)
-        json_recipes.append(recipe)
-        # writetojson(recipe,food_schema)
+        if isValid(recipe,food_schema):
+            json_recipes.append(recipe)
+            # writeToMongo(recipe)
+            writeToJson(recipe.copy())
+            continue
 
     # convert list of individual recipes into dict
     data = {"recipes":json_recipes}
-    appendToJson("./data/food_network_recipes.json",data,website_schema)
+    if isValid(data,website_schema):
+        appendToJson("./data/food_network_recipes.json",data)
+
+# write json data objects to the mongoDB cloud server
+# def writeToMongo(data):
+#     res = collection.insert_one(data)
+#     return res
 
 # function to add recipe entries to a json file
-def appendToJson(filename,data, schema):
+def appendToJson(filename,data):
     # check if file exists, if not; reference an empty list
     try:
         with open(filename, "r") as json_file:
@@ -126,38 +143,41 @@ def appendToJson(filename,data, schema):
     except FileNotFoundError:
         current_file = []
 
-    #validate to ensure data is formatted correctly
-    try:
-        validate(instance=data, schema=schema) 
-    except jsonschema.exceptions.ValidationError as e:
-        print("Data validation failed:", e)
-    else:
-        # Append new data to old data
-        current_file.append(data)
+    # Append new data to old data
+    current_file.append(data)
 
-        # Replace old file with newly compiled data
-        with open(filename, "w") as json_file:
-            json.dump(current_file, json_file, indent=4)
-        print("Data has been appended to", filename)
+    # Replace old file with newly compiled data
+    with open(filename, "w") as json_file:
+        json.dump(current_file, json_file, indent=4)
+    print("Data has been appended to", filename)
 
 # function to write a recipe to its own json file
-def writetojson(data, schema):
+#  adds a new object ID field to the json object
+# NOTE: must pass in already validated data
+def writeToJson(data):
+    uuid1 = str(uuid.uuid4()) # uuid for id of recipe object
+    data["id"] = uuid1 # adding id to dictionary (recipe object)
     #format the recipe name
     recipe_name = data["name"].replace(" ","_")
     recipe_name = recipe_name.replace("\"", "")
     # print(recipe_name)
     recipe_filename = f'{recipe_name}_{data["id"]}.json'
 
-    # validate data
-    try:
-        validate(instance=data, schema=schema)
-    except jsonschema.exceptions.ValidationError as e:
-        print("Data validation failed:", e)
-    else:
-        with open(f'./data/{recipe_filename}', 'w') as json_file:
-            json.dump(data, json_file, indent=4)
-        print(f'Data has been successfully written to \'{recipe_filename}\'')
+    # write recipe to it's own json file
+    with open(f'./data/{recipe_filename}', 'w') as json_file:
+        json.dump(data, json_file, indent=4)
+    print(f'Data has been successfully written to \'{recipe_filename}\'')
 
+# function to validate data and ensure it is formatted correctly
+def isValid(data, schema):
+    valid = True
+    try:
+        validate(instance=data, schema=schema) 
+    except jsonschema.exceptions.ValidationError as e:
+        valid = False
+        print("Data validation failed:", e)
+
+    return valid
 def main():
     # Load JSON Schema
     # with open('./data/food_recipe_schema.json', 'r') as schema_file:
