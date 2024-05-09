@@ -1,9 +1,7 @@
 # Name(s) : Alex Lopez, Anthony Tran, Glen Lee
 
 # This script scrapes recipes specifically from the Food Network Website
-import sys
 import os
-import time
 import json
 import jsonschema
 import uuid
@@ -14,10 +12,10 @@ import requests
 import pymongo
 
 # connecting to mongo server
-# MUST have your own connection string
-# client = pymongo.MongoClient("your_connection_string")
-# db = client["RecipeDB"]
-# collection = db["recipes"]
+# MUST have proper connection string
+client = pymongo.MongoClient("connection_string")
+db = client["RecipeDB"]
+collection = db["recipes"]
 
 def scrape_page(soup, recipe):
     # find all recipe links
@@ -121,7 +119,7 @@ def scrape_website():
         if isValid(recipe,food_schema):
             json_recipes.append(recipe)
             # writeToMongo(recipe)
-            writeToJson(recipe.copy())
+            # writeToJson(recipe.copy())
             continue
 
     # convert list of individual recipes into dict
@@ -130,9 +128,9 @@ def scrape_website():
         appendToJson("./data/food_network_recipes.json",data)
 
 # write json data objects to the mongoDB cloud server
-# def writeToMongo(data):
-#     res = collection.insert_one(data)
-#     return res
+def writeToMongo(data):
+    res = collection.insert_one(data)
+    return res
 
 # function to add recipe entries to a json file
 def appendToJson(filename,data):
@@ -184,8 +182,8 @@ def main():
     #     schema = json.load(schema_file)
         
     # Retrieve NODE_ID environment variable to identify the node
-    node_id = os.getenv('NODE_ID')
-    print(f'STARTING UP NODE {node_id}')
+    # node_id = os.getenv('NODE_ID')
+    # print(f'STARTING UP NODE {node_id}')
 
     scrape_website()
 
