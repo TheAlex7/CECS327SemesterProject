@@ -37,3 +37,8 @@ tests/.excluded_sites
 
 # Vim swap files
 *.swp
+
+# json files
+*.json
+!food_recipe_schema.json
+!website_specific_recipes_schema.json

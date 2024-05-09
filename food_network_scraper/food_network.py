@@ -1,5 +1,6 @@
 # Name(s) : Alex Lopez, Anthony Tran, Glen Lee
 
+# This script scrapes recipes specifically from the Food Network Website
 import sys
 import os
 import time

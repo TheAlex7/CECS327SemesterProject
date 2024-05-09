@@ -17,4 +17,4 @@ EXPOSE 5000
 ENV NAME node
 
 # Run node.py when the container launches
-CMD python food_network.py 
+CMD python food_network.py
