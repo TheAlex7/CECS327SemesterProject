@@ -6,7 +6,43 @@
       "recipes": {
         "type": "array",
         "items": {
-          "$ref": "data/food_recipe_schema.json"
+          "title": "Recipe",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Universally unique identifier for the recipe"
+            },
+            "name": {
+              "type": "string",
+              "description": "Recipe name"
+            },
+            "source_url":{
+              "type": "string",
+              "description": "Source url for the recipe obtained"
+            },
+            "ingredients": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "description": "All ingredients"
+              }
+            },
+            "instructions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": ["name", "ingredients", "instructions", "source_url"]
         }
       }
     },

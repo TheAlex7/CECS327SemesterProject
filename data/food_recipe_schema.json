@@ -24,22 +24,8 @@
       "ingredients": {
         "type": "array",
         "items": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string",
-              "description": "Name of the ingredient"
-            },
-            "quantity": {
-              "type": "string",
-              "description": "Quantity of the ingredient"
-            },
-            "unit": {
-              "type": "string",
-              "description": "Unit of measurement (g, tbsp etc.)"
-            }
-          },
-          "required": ["name", "quantity", "unit"]
+          "type": "string",
+          "description": "All ingredients"
         }
       },
       "instructions": {
