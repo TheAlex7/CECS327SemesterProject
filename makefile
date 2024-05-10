@@ -2,7 +2,7 @@
 
 build: # create new docker image along with json file containing recipes
 	@echo "Building new Docker Network..."
-	@docker-compose up --build
+	@docker-compose build
 
 detach: # run a detached docker network
 	@echo "Turning on Docker Network in detached mode..."

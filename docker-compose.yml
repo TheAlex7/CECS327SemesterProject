@@ -9,6 +9,8 @@ services: # Defines containsers to be created
       context: ./master # Path for Dockerfile for building the master service image
     ports:
       - "5005:5000" # Maps port 5000 inside container to port 5005 on host
+    environment: # Environment var passed to conatiner
+      LISTEN_PORT: "5002" # Port this node listens to
     networks:
       - Proj2-distributed-network # Connects to netowrk
     volumes:
@@ -38,7 +40,7 @@ services: # Defines containsers to be created
       - "5002:5000" # Maps port 5000 inside container to port 5002 on host
     environment:
       NODE_ID: "2" # Used by node file to identify itself
-      LISTEN_PORT: "5002" # Port this node lsitens to
+      LISTEN_PORT: "5002" # Port this node listens to
     # volumes:
     #   - ./data:/app/data
     networks:

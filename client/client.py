@@ -1,6 +1,4 @@
 import socket
-import struct
-import sys
 import os
 import time
 import json
@@ -26,41 +24,45 @@ def queryToMaster(method,query=''):
 
 def main():
     while True:
-        res = dict()
-        user_decision = input("Make query from...(q to quit)\n\t1) Local Json files\n\t2) MongoDB Server Client\n")
+        res = {"name":"NONE"}
+        print("Make query from...(q to quit)\n\t1) Local Json files\n\t2) MongoDB Server Client\n")
+        user_decision = input()
+
         if user_decision == '1':
             query = input("Enter food to search: ")
-            # res = queryToMaster(1,query)
-            print("d1")
+            res = queryToMaster(1,query)
+
         elif user_decision == '2':
             query = input("Enter food to search: ")
-            # res = queryToMaster(2,query)
-            print("d2")
+            res = queryToMaster(2,query)
+
         elif user_decision == 'q':
             print("Quitting...")
             queryToMaster('q')
             break
+
         else:
             print("Invalid input")
             continue
 
         if res["name"] == "NONE":
-            print("No results.")
+            print("No results.\n")
         else:
             for key, val in res.items():
                 print(f"{key}: {val}")
 
 if __name__ == "__main__":
+    time.sleep(10)
     # Retrieve NODE_ID environment variable to identify the node
     node_id = os.getenv('NODE_ID')
 
     # Retrieve the LISTEN_PORT environment variable, which specifies the port this node listens for incoming messages
-    listen_port = int(os.getenv('LISTEN_PORT'))
+    # listen_port = int(os.getenv('LISTEN_PORT'))
 
     # Use the service name as the hostname in Docker environment
     master_ip = 'master'
 
     # Port number on which master listens for ack messages from nodes
     master_port = 5000 
-    time.sleep(1) #ensure server is up before client tries to connect
+    time.sleep(5) #ensure server is up before client tries to connect
     main()

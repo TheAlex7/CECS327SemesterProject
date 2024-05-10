@@ -2,6 +2,7 @@
 
 import sys
 import time
+import os
 import json
 import pymongo
 import socket
@@ -32,11 +33,11 @@ def searchMongo(query):
 
 def main():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.bind((client_ip, client_port)) # Bind the socket
+        print("will bind")
+        sock.bind((host_ip, host_port)) # Bind the socket
         
+        print("Server listening on port", host_port)
         sock.listen()
-
-        print("Server listening on port", client_port)
 
         # Accept a connection
         conn, addr = sock.accept()
@@ -62,13 +63,23 @@ def main():
                 conn.sendall(result.encode())
 
 if __name__ == "__main__":
+    # time.sleep(30)
     # connecting to mongo server
     # MUST have proper connection string
     client = pymongo.MongoClient("connection_string")
     db = client["RecipeDB"]
     collection = db["recipes"]
 
+    # Use the service name as the hostname in Docker environment
+    master_ip = 'master'
+    # Port number on which master listens for client messages
+    master_port = 5000 
+
+    host_ip = '0.0.0.0'  # Listen on all available interfaces
+    host_port = 5000
+
     # ip and port as set up in the .yml file
+    # listen_port = int(os.getenv('LISTEN_PORT'))
     client_ip = "client"
     client_port = 5002
 
