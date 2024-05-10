@@ -122,10 +122,17 @@ def scrape_website():
             # writeToJson(recipe.copy())
             continue
 
-    # convert list of individual recipes into dict
-    data = {"recipes":json_recipes}
+    # convert list of individual recipes into dict object
+    data = {
+        "name": "Food Network",
+        "recipes":json_recipes
+    }
     if isValid(data,website_schema):
         appendToJson("./data/food_network_recipes.json",data)
+        
+    with open(f'./data/recipes.json', 'w') as json_file:
+        json.dump(json_recipes, json_file, indent=4)
+    print(f'Data has been successfully written to recipes.json')
 
 # write json data objects to the mongoDB cloud server
 def writeToMongo(data):

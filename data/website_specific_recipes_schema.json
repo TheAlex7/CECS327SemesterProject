@@ -3,6 +3,9 @@
     "title": "WebsiteRecipes",
     "type": "object",
     "properties": {
+      "name": {
+        "type": "string"
+      },
       "recipes": {
         "type": "array",
         "items": {
@@ -46,6 +49,6 @@
         }
       }
     },
-    "required": ["recipes"]
+    "required": ["name","recipes"]
   }
   

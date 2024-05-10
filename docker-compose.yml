@@ -1,15 +1,14 @@
 # Name(s) : Alex Lopez, Anthony Tran, Glen Lee
 
-# Description: we took our old docker-compose.yml from project 1 and tweaked it to fit this project
+# Description: sets up docker network to allow connection between client and master nodes
 
-#Reference(s) : https://docs.docker.com/language/python/develop/
 version: '3'
 services: # Defines containsers to be created
   master:
     build:
       context: ./master # Path for Dockerfile for building the master service image
-    # ports:
-    #   - "5005:5000" # Maps port 5000 inside container to port 5005 on host
+    ports:
+      - "5005:5000" # Maps port 5000 inside container to port 5005 on host
     networks:
       - Proj2-distributed-network # Connects to netowrk
     volumes:
@@ -30,18 +29,18 @@ services: # Defines containsers to be created
     networks:
       - Proj2-distributed-network
 
-  node2: # Definition for second node service
+  client: # Definition for client service
     build: 
-      context: ./node # Path to Dockerfile for node
+      context: ./client # Path to Dockerfile for node
       args:
         NODE_ID: "2"  # Build argument
-    # ports:
-    #   - "5002:5000" # Maps port 5000 inside container to port 5002 on host
-    # environment:
-    #   NODE_ID: "2" # Used by node file to identify itself
+    ports:
+      - "5002:5000" # Maps port 5000 inside container to port 5002 on host
+    environment:
+      NODE_ID: "2" # Used by node file to identify itself
     #   LISTEN_PORT: "5002" # Port this node lsitens to
-    volumes:
-      - ./data:/app/data
+    # volumes:
+    #   - ./data:/app/data
     networks:
       - Proj2-distributed-network
 
