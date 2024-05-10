@@ -23,7 +23,7 @@ def scrape_page(soup, recipe):
 
     links_visited = set() # set to avoid revisiting already seen links
     #load visited links
-    with open("./food_network_scraper/visited_links.txt",'r') as visited_links:
+    with open("./data/visited_links.txt",'r') as visited_links:
         for line in visited_links:
             links_visited.add(line.strip())
 
@@ -54,7 +54,7 @@ def scrape_page(soup, recipe):
         )
         #newly seen link gets added to set and txt file
         links_visited.add(recipe_url)
-        with open("./food_network_scraper/visited_links.txt",'a') as visited_links:
+        with open("./data/visited_links.txt",'a') as visited_links:
             visited_links.write(f"{recipe_url}\n")
         break
 
