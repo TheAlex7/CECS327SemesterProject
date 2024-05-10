@@ -104,11 +104,11 @@ def scrape_website():
         # looking for the "Next →" HTML element in the new page
         next_li_element = soup.find('a', class_='o-Pagination__a-Button.o-Pagination__a-NextButton')
     
-    #schema to compile multiple recipes into 1 json file.
+    #schema to compile multiple recipes from single website into 1 json file.
     # this json file will be labeled according to the main domain source
     # of the recipes
-    with open('./data/website_specific_recipes_schema.json', 'r') as schema_file:
-        website_schema = json.load(schema_file)
+    # with open('./data/website_specific_recipes_schema.json', 'r') as schema_file:
+    #     website_schema = json.load(schema_file)
 
     #individual food recipe json schema
     with open('./data/food_recipe_schema.json', 'r') as schema_file:
@@ -117,22 +117,22 @@ def scrape_website():
     json_recipes = []
     for recipe in recipies:
         if isValid(recipe,food_schema):
-            json_recipes.append(recipe)
             # writeToMongo(recipe)
-            # writeToJson(recipe.copy())
+            uuid1 = str(uuid.uuid4()) # uuid for id of recipe object
+            recipe["id"] = uuid1 # adding id to dictionary (recipe object)            
+            # writeToJson(recipe)
+            json_recipes.append(recipe)
             continue
 
     # convert list of individual recipes into dict object
-    data = {
-        "name": "Food Network",
-        "recipes":json_recipes
-    }
-    if isValid(data,website_schema):
-        appendToJson("./data/food_network_recipes.json",data)
+    # data = {
+    #     "name": "Food Network",
+    #     "recipes":json_recipes
+    # }
+    # if isValid(data,website_schema):
+    #     appendToJson("./data/food_network_recipes.json",data)
         
-    with open(f'./data/recipes.json', 'w') as json_file:
-        json.dump(json_recipes, json_file, indent=4)
-    print(f'Data has been successfully written to recipes.json')
+    appendToJson("./data/food_network_recipes.json",json_recipes)
 
 # write json data objects to the mongoDB cloud server
 def writeToMongo(data):
@@ -140,6 +140,7 @@ def writeToMongo(data):
     return res
 
 # function to add recipe entries to a json file
+# NOTE: must pass in already validated data
 def appendToJson(filename,data):
     # check if file exists, if not; reference an empty list
     try:
@@ -148,8 +149,8 @@ def appendToJson(filename,data):
     except FileNotFoundError:
         current_file = []
 
-    # Append new data to old data
-    current_file.append(data)
+    # combine new data with old data
+    current_file.extend(data)
 
     # Replace old file with newly compiled data
     with open(filename, "w") as json_file:
@@ -160,8 +161,7 @@ def appendToJson(filename,data):
 #  adds a new object ID field to the json object
 # NOTE: must pass in already validated data
 def writeToJson(data):
-    uuid1 = str(uuid.uuid4()) # uuid for id of recipe object
-    data["id"] = uuid1 # adding id to dictionary (recipe object)
+    uuid1 = data["id"] # id for filename
     #format the recipe name
     recipe_name = data["name"].replace(" ","_")
     recipe_name = recipe_name.replace("\"", "")

@@ -14,15 +14,15 @@ services: # Defines containsers to be created
     volumes:
       - ./data:/app/data
 
-  node1: # Definition for first node service
+  node1: # Definition for first scraper node service
     build: 
       context: ./food_network_scraper # Path to Dockerfile for scraper node
       args:
         NODE_ID: "1" # Build argument
     # ports:
     #   - "5001:5000" # Maps port 5000 inside container to port 5001 on host
-    # environment: # Environment var passed to conatiner
-    #   NODE_ID: "1" # Used by node file to identify itself
+    environment: # Environment var passed to conatiner
+      NODE_ID: "1" # Used by node file to identify itself
     #   LISTEN_PORT: "5001" # Port this node listens to
     volumes:
       - ./data:/app/data
@@ -38,7 +38,7 @@ services: # Defines containsers to be created
       - "5002:5000" # Maps port 5000 inside container to port 5002 on host
     environment:
       NODE_ID: "2" # Used by node file to identify itself
-    #   LISTEN_PORT: "5002" # Port this node lsitens to
+      LISTEN_PORT: "5002" # Port this node lsitens to
     # volumes:
     #   - ./data:/app/data
     networks:
