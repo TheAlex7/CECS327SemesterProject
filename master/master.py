@@ -15,10 +15,10 @@ def searchFoodNet(query):
     with open('./data/food_network_recipes.json') as json_file:
         data = json.load(json_file)
 
-    # Search through list of dictionaries
+    # Search through list of dictionaries (json objects)
     for obj in data:
         if query in obj["name"]:
-            result = json.dumps(obj)
+            result = obj
 
     return result
 
@@ -33,11 +33,10 @@ def searchMongo(query):
 
 def main():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        print("will bind")
-        sock.bind((host_ip, host_port)) # Bind the socket
+        sock.bind((master_ip, master_port)) # Bind the socket
         
-        print("Server listening on port", host_port)
         sock.listen()
+        print("Server listening on port", master_port)
 
         # Accept a connection
         conn, addr = sock.accept()
@@ -48,35 +47,43 @@ def main():
                 # Receive msg from the client
                 data = conn.recv(1024).decode()
 
-                if data[0] == "q":
-                    print("Client closed. Shutting down.")
+                if not data or data == "q":
+                    print("Client disconnected. Shutting down.")
                     break  # quit message = break the loop
 
-                method = data[0]
-                query = data[2:]
+                method = data[0] #search method
+                if len(data) <= 2 or len(data[2:].strip()) == 0: # make sure query isn't empty
+                    conn.sendall(b"{\"name\":\"NONE\"}")
+                    continue
+                else:
+                    query = data[2:].strip()
 
-                if method == '1':
+                if method == '1': # determine search method
                     result = searchFoodNet(query)
                 else:
                     result = searchMongo(query)
+                
+                result = json.dumps(result) # convert json object into string to send through socket
 
                 conn.sendall(result.encode())
 
 if __name__ == "__main__":
     # time.sleep(30)
-    # connecting to mongo server
-    # MUST have proper connection string
+
+    ### connecting to mongo server
+    ## MUST have proper connection string to use mongo search!!!
     client = pymongo.MongoClient("connection_string")
     db = client["RecipeDB"]
     collection = db["recipes"]
+    ###
 
     # Use the service name as the hostname in Docker environment
     master_ip = 'master'
     # Port number on which master listens for client messages
-    master_port = 5000 
+    master_port = 6000 
 
-    host_ip = '0.0.0.0'  # Listen on all available interfaces
-    host_port = 5000
+    host_ip = "127.0.0.1" # The server's IP address
+    host_port = 6000 # The port used by the server
 
     # ip and port as set up in the .yml file
     # listen_port = int(os.getenv('LISTEN_PORT'))

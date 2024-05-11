@@ -1,7 +1,6 @@
 # Name(s) : Alex Lopez, Anthony Tran, Glen Lee
 
 # This script scrapes recipes specifically from the Food Network Website
-import os
 import json
 import jsonschema
 import uuid
@@ -11,21 +10,20 @@ from bs4 import BeautifulSoup
 import requests
 import pymongo
 
-# connecting to mongo server
-# MUST have proper connection string
-client = pymongo.MongoClient("connection_string")
-db = client["RecipeDB"]
-collection = db["recipes"]
-
 def scrape_page(soup, recipe):
     # find all recipe links
     recipe_links = soup.find_all('li', class_='m-PromoList__a-ListItem')
 
     links_visited = set() # set to avoid revisiting already seen links
-    #load visited links
-    with open("./data/visited_links.txt",'r') as visited_links:
-        for line in visited_links:
-            links_visited.add(line.strip())
+    try:
+        with open("./data/visited_links.txt",'r') as visited_links:
+            for line in visited_links:
+                links_visited.add(line.strip())
+    except FileNotFoundError:
+        print("Creating visited_links.txt")
+        with open("./data/visited_links.txt",'w') as _:
+            pass
+    
 
     # iterating through recipe link
     for link in recipe_links:
@@ -56,7 +54,6 @@ def scrape_page(soup, recipe):
         links_visited.add(recipe_url)
         with open("./data/visited_links.txt",'a') as visited_links:
             visited_links.write(f"{recipe_url}\n")
-        break
 
 def scrape_website():
     # the url of the home page of the target website
@@ -103,12 +100,6 @@ def scrape_website():
 
         # looking for the "Next →" HTML element in the new page
         next_li_element = soup.find('a', class_='o-Pagination__a-Button.o-Pagination__a-NextButton')
-    
-    #schema to compile multiple recipes from single website into 1 json file.
-    # this json file will be labeled according to the main domain source
-    # of the recipes
-    # with open('./data/website_specific_recipes_schema.json', 'r') as schema_file:
-    #     website_schema = json.load(schema_file)
 
     #individual food recipe json schema
     with open('./data/food_recipe_schema.json', 'r') as schema_file:
@@ -117,22 +108,15 @@ def scrape_website():
     json_recipes = []
     for recipe in recipies:
         if isValid(recipe,food_schema):
-            # writeToMongo(recipe)
+            # writeToMongo(recipe)  ###UNCOMMENT THIS IF MONGO CONNECTIONS ARE SET UP
             uuid1 = str(uuid.uuid4()) # uuid for id of recipe object
             recipe["id"] = uuid1 # adding id to dictionary (recipe object)            
             # writeToJson(recipe)
             json_recipes.append(recipe)
             continue
-
-    # convert list of individual recipes into dict object
-    # data = {
-    #     "name": "Food Network",
-    #     "recipes":json_recipes
-    # }
-    # if isValid(data,website_schema):
-    #     appendToJson("./data/food_network_recipes.json",data)
         
     appendToJson("./data/food_network_recipes.json",json_recipes)
+    print("Database loaded.")
 
 # write json data objects to the mongoDB cloud server
 def writeToMongo(data):
@@ -183,16 +167,16 @@ def isValid(data, schema):
         print("Data validation failed:", e)
 
     return valid
-def main():
-    # Load JSON Schema
-    # with open('./data/food_recipe_schema.json', 'r') as schema_file:
-    #     schema = json.load(schema_file)
-        
-    # Retrieve NODE_ID environment variable to identify the node
-    # node_id = os.getenv('NODE_ID')
-    # print(f'STARTING UP NODE {node_id}')
 
+def main():
     scrape_website()
 
 if __name__ == "__main__":
+    ### connecting to mongo server
+    ## MUST have proper connection string to write to mongo!!!
+    client = pymongo.MongoClient("connection_string")
+    db = client["RecipeDB"]
+    collection = db["recipes"]
+    ###
+
     main()

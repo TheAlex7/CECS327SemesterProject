@@ -8,7 +8,7 @@ detach: # run a detached docker network
 	@echo "Turning on Docker Network in detached mode..."
 	@docker-compose up -d
 
-up:  # run current docker image
+fill_db:  # run current docker image
 	@echo "Turning on Docker Network..."
 	@docker-compose up
 
