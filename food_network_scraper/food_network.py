@@ -43,7 +43,7 @@ def scrape_page(soup, recipe):
         directions = [direction.text.strip() for direction in directions_list]
         recipe.append(
             {
-                'name': recipe_name,
+                'name': recipe_name.lower(),
                 'ingredients': ingredients[1:],
                 'instructions': directions,
                 'source_url': recipe_url

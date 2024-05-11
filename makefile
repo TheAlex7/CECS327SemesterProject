@@ -4,13 +4,14 @@ build: # create new docker image along with json file containing recipes
 	@echo "Building new Docker Network..."
 	@docker-compose build
 
-detach: # run a detached docker network
-	@echo "Turning on Docker Network in detached mode..."
-	@docker-compose up -d
+fill_db:  # run scraper images on the shared volume
+	@echo "Scraper node(s) filling up database..."
+	@docker-compose run --volume ./data:/app/data node1
 
-fill_db:  # run current docker image
-	@echo "Turning on Docker Network..."
-	@docker-compose up
+server: # run a detached docker network
+	@echo "Turning on Docker Network in detached mode..."
+	@docker-compose up -d master
+	@docker-compose run -it client
 
 down: # take down docker network
 	@echo "Turning off Docker Network..."

@@ -1,6 +1,10 @@
+# Name(s) : Alex Lopez, Anthony Tran, Glen Lee
+
+# Description: TODO
+
+import time
 import socket
 import os
-import time
 import json
 
 def main():
@@ -41,7 +45,9 @@ def main():
                 print("No results.\n")
             else:
                 for key, val in json_file.items():
-                    print(f"{key}: {val}")
+                    if key == "id":
+                        continue
+                    print(f"{key}: {val}\n")
 
 if __name__ == "__main__":
     # Retrieve NODE_ID environment variable to identify the node
@@ -52,5 +58,5 @@ if __name__ == "__main__":
     # Port number on which master listens for ack messages from nodes
     master_port = 6000 
 
-    time.sleep(5) #ensure server is up before client tries to connect
+    time.sleep(5) # ensures server is up before client connects
     main()

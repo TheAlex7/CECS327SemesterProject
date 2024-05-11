@@ -1,8 +1,6 @@
 # Name(s) : Alex Lopez, Anthony Tran, Glen Lee
 
-import sys
-import time
-import os
+# Description: TODO
 import json
 import pymongo
 import socket
@@ -80,14 +78,6 @@ if __name__ == "__main__":
     # Use the service name as the hostname in Docker environment
     master_ip = 'master'
     # Port number on which master listens for client messages
-    master_port = 6000 
-
-    host_ip = "127.0.0.1" # The server's IP address
-    host_port = 6000 # The port used by the server
-
-    # ip and port as set up in the .yml file
-    # listen_port = int(os.getenv('LISTEN_PORT'))
-    client_ip = "client"
-    client_port = 5002
+    master_port = 6000
 
     main()
