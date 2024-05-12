@@ -139,7 +139,7 @@ def appendToJson(filename,data):
     # Replace old file with newly compiled data
     with open(filename, "w") as json_file:
         json.dump(current_file, json_file, indent=4)
-    print("Data has been appended to", filename)
+        print("Data has been appended to", filename)
 
 # function to write a recipe to its own json file
 #  adds a new object ID field to the json object

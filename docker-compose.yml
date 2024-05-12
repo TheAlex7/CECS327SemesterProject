@@ -7,10 +7,6 @@ services: # Defines containsers to be created
   master:
     build:
       context: ./master # Path for Dockerfile for building the master service image
-    ports:
-      - "5005:5000" # Maps port 5000 inside container to port 5005 on host
-    environment: # Environment var passed to conatiner
-      LISTEN_PORT: "5002" # Port this node listens to
     networks:
       - Proj2-distributed-network # Connects to netowrk
     volumes:
@@ -19,13 +15,6 @@ services: # Defines containsers to be created
   node1: # Definition for first scraper node service
     build: 
       context: ./food_network_scraper # Path to Dockerfile for scraper node
-      args:
-        NODE_ID: "1" # Build argument
-    # ports:
-    #   - "5001:5000" # Maps port 5000 inside container to port 5001 on host
-    environment: # Environment var passed to conatiner
-      NODE_ID: "1" # Used by node file to identify itself
-    #   LISTEN_PORT: "5001" # Port this node listens to
     volumes:
       - ./data:/app/data
     networks:
@@ -34,15 +23,6 @@ services: # Defines containsers to be created
   client: # Definition for client service
     build: 
       context: ./client # Path to Dockerfile for node
-      args:
-        NODE_ID: "2"  # Build argument
-    ports:
-      - "5002:5000" # Maps port 5000 inside container to port 5002 on host
-    environment:
-      NODE_ID: "2" # Used by node file to identify itself
-      LISTEN_PORT: "5002" # Port this node listens to
-    # volumes:
-    #   - ./data:/app/data
     networks:
       - Proj2-distributed-network
 

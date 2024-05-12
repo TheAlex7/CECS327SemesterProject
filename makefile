@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := build
 
-build: # create new docker image along with json file containing recipes
+build: # create new docker containers for the network
 	@echo "Building new Docker Network..."
 	@docker-compose build
 
@@ -8,14 +8,25 @@ fill_db:  # run scraper images on the shared volume
 	@echo "Scraper node(s) filling up database..."
 	@docker-compose run --volume ./data:/app/data node1
 
-server: # run a detached docker network
-	@echo "Turning on Docker Network in detached mode..."
+server: # run a detached server and interactive client node
+	@echo "Running server in detached mode and client in iterative mode..."
 	@docker-compose up -d master
 	@docker-compose run -it client
 
-down: # take down docker network
+server_only:
+	@echo "Running server in detached mode..."
+	@docker-compose up -d master
+
+client_only:
+	@echo "Running client in iterative mode."
+	@docker-compose run -it client
+
+down: # take down docker containers
 	@echo "Turning off Docker Network..."
 	@docker-compose down
 
-inspect:
-	@cat ./net-analysis/network_activities.csv
+purge: # delete all containers/images
+	@echo "Purging all docker images and containers"
+	@docker stop $(docker ps -a -q)
+	@docker rm $(docker ps -a -q)
+	@docker rmi $(docker images -a -q)

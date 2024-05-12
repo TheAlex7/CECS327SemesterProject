@@ -1,10 +1,9 @@
 # Name(s) : Alex Lopez, Anthony Tran, Glen Lee
 
-# Description: TODO
+# Description: Client node for making food recipe queries
 
 import time
 import socket
-import os
 import json
 
 def main():
@@ -38,7 +37,7 @@ def main():
             sock.sendall(mquery.encode())
 
             # decode the received json response
-            response = sock.recv(1024).decode()
+            response = sock.recv(4096).decode()
             json_file = json.loads(response) # convert string to json obj
 
             if json_file["name"] == "NONE":
@@ -50,9 +49,6 @@ def main():
                     print(f"{key}: {val}\n")
 
 if __name__ == "__main__":
-    # Retrieve NODE_ID environment variable to identify the node
-    node_id = os.getenv('NODE_ID')
-
     # Use the service name as the hostname in Docker environment
     master_ip = 'master'
     # Port number on which master listens for ack messages from nodes

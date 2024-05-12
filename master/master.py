@@ -1,6 +1,6 @@
 # Name(s) : Alex Lopez, Anthony Tran, Glen Lee
 
-# Description: TODO
+# Description: Server that accepts connections from clients trying to make queries
 import json
 import pymongo
 import socket
@@ -9,7 +9,7 @@ import socket
 def searchFoodNet(query):
     result = {"name": "NONE"} # default result; if no results
 
-    # Read the JSON file
+    # Read the local JSON file
     with open('./data/food_network_recipes.json') as json_file:
         data = json.load(json_file)
 
@@ -39,7 +39,7 @@ def main():
         # Accept a connection
         conn, addr = sock.accept()
         with conn:
-            print('Connected by', addr)
+            print('Connected by', addr) # address of node that connected
 
             while True:
                 # Receive msg from the client
@@ -66,8 +66,6 @@ def main():
                 conn.sendall(result.encode())
 
 if __name__ == "__main__":
-    # time.sleep(30)
-
     ### connecting to mongo server
     ## MUST have proper connection string to use mongo search!!!
     client = pymongo.MongoClient("connection_string")
@@ -79,5 +77,4 @@ if __name__ == "__main__":
     master_ip = 'master'
     # Port number on which master listens for client messages
     master_port = 6000
-
     main()
