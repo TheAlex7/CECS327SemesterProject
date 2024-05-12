@@ -24,9 +24,3 @@ client_only:
 down: # take down docker containers
 	@echo "Turning off Docker Network..."
 	@docker-compose down
-
-purge: # delete all containers/images
-	@echo "Purging all docker images and containers"
-	@docker stop $(docker ps -a -q)
-	@docker rm $(docker ps -a -q)
-	@docker rmi $(docker images -a -q)
