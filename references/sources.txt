@@ -3,6 +3,7 @@ Inspiration:
 ● https://ieeexplore-ieee-org.csulb.idm.oclc.org/document/10270597
 
 Implementation references:
-●
-●
-●
+● https://www.mongodb.com/developer/languages/python/python-quickstart-crud/ 
+● https://realpython.com/python-sockets/ 
+● https://docs.python.org/3/library/socket.html 
+● https://docs.docker.com/network/#container-networks
