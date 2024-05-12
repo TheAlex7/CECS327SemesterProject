@@ -42,4 +42,3 @@ tests/.excluded_sites
 # json files
 *.json
 !food_recipe_schema.json
-!website_specific_recipes_schema.json
