@@ -44,7 +44,7 @@ def main():
                 print("No results.\n")
             else:
                 for key, val in json_file.items():
-                    if key == "id":
+                    if key == "id" or key == "_id":
                         continue
                     print(f"{key}: {val}\n")
 

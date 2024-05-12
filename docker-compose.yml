@@ -1,6 +1,6 @@
 # Name(s) : Alex Lopez, Anthony Tran, Glen Lee
 
-# Description: sets up docker network to allow connection between client and master nodes
+# Description: sets up docker network to allow connection between client and master nodes + manages scraper nodes
 
 version: '3'
 services: # Defines containsers to be created

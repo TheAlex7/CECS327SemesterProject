@@ -108,10 +108,10 @@ def scrape_website():
     json_recipes = []
     for recipe in recipies:
         if isValid(recipe,food_schema):
-            # writeToMongo(recipe)  ###UNCOMMENT THIS IF MONGO CONNECTIONS ARE SET UP
+            # writeToMongo(recipe.copy())  ###UNCOMMENT THIS IF MONGO CONNECTIONS ARE SET UP
             uuid1 = str(uuid.uuid4()) # uuid for id of recipe object
             recipe["id"] = uuid1 # adding id to dictionary (recipe object)            
-            # writeToJson(recipe)
+            #writeToJson(recipe) #write recipe to single json
             json_recipes.append(recipe)
             continue
         
@@ -145,7 +145,6 @@ def appendToJson(filename,data):
 #  adds a new object ID field to the json object
 # NOTE: must pass in already validated data
 def writeToJson(data):
-    uuid1 = data["id"] # id for filename
     #format the recipe name
     recipe_name = data["name"].replace(" ","_")
     recipe_name = recipe_name.replace("\"", "")

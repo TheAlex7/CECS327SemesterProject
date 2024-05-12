@@ -22,6 +22,7 @@ src/
 *.txt
 !requirements.txt
 !sources.txt
+!README.txt
 
 # Comma-Separated Values (CSV) Reports
 *.csv

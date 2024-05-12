@@ -22,12 +22,11 @@ def searchFoodNet(query):
 
 # search through mongoDB database; filled by scraper node(s)
 def searchMongo(query):
-    results = collection.find({ "name": { "$regex": query } }) # Mongo query of substring inside names
-    if results.count() == 0:
-        return {"name": "NONE"}
-    else:
-        first_result = next(results, None)
-        return first_result
+    result = collection.find_one({ "name": { "$regex": query } }) # Mongo query of substring inside names
+    if not result:
+        return {"name":"NONE"}
+    result["_id"] = str(result["_id"])
+    return result
 
 def main():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
